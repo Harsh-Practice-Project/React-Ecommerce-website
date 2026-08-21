@@ -1,96 +1,111 @@
-import React from "react";
+import React, { useState } from "react";
 
 export const ProductCard = ({ productData, setCartItem }) => {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredProducts = productData.filter((product) =>
+    product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.category.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div className="min-h-screen bg-gray-100 pt-28 px-6 pb-10 md:px-10">
+    <div className="min-h-screen bg-[#f8fafc] pt-32 px-4 md:px-8 pb-10">
       {/* Heading */}
       <div className="max-w-7xl mx-auto mb-8">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900">
-          Explore Products
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+          Products
         </h1>
+        <p className="text-gray-500 mt-1 text-sm">
+          Manage your store products
+        </p>
+      </div>
 
-        <p className="text-gray-500 mt-2">Discover our latest collection</p>
+      {/* Search Section */}
+      <div className="max-w-7xl mx-auto bg-white border border-gray-100 rounded-2xl shadow-sm p-4 mb-8">
+        <div className="relative">
+          <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+            <svg 
+              className="h-5 w-5 text-gray-400" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth="2" 
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
+              />
+            </svg>
+          </div>
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="block w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400 text-sm focus:outline-none"
+          />
+        </div>
       </div>
 
       {/* Product Grid */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {productData.map((product) => (
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {filteredProducts.map((product) => (
           <div
             key={product.id}
-            className="group bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300"
+            className="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-between"
           >
-            {/* Image Section */}
-            <div className="relative h-64 bg-gray-50 overflow-hidden">
-              {/* Category Badge */}
-              <span className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm text-blue-600 px-3 py-1.5 rounded-full text-xs font-bold capitalize shadow-sm border border-blue-100">
-                {product.category}
-              </span>
-
-              {/* Wishlist */}
-              <button className="absolute top-4 right-4 z-10 w-9 h-9 bg-white/95 backdrop-blur-sm rounded-full shadow-sm flex items-center justify-center text-gray-500 hover:text-red-500 hover:scale-105 cursor-pointer transition-all duration-200">
-                ♥
-              </button>
-
-              {/* Image Wrapper */}
-              <div className="w-full h-full flex items-center justify-center p-8">
+            {/* Image Wrapper */}
+            <div className="p-4 pb-2">
+              <div className="relative aspect-square w-full bg-[#f4f5f6] rounded-xl flex items-center justify-center p-6 overflow-hidden">
                 <img
                   src={product.image}
                   alt={product.title}
-                  className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
+                  className="max-h-full max-w-full object-contain mix-blend-multiply"
                 />
               </div>
             </div>
 
-            {/* Content */}
-            <div className="p-5">
-              {/* Rating */}
-              <div className="flex items-center gap-2 mb-3">
-                <span className="bg-green-500 text-white px-2 py-1 rounded-md text-sm font-bold">
-                  ★ {product.rating.rate}
-                </span>
-
-                <span className="text-sm text-gray-500">
-                  {product.rating.count} Reviews
-                </span>
-              </div>
-
-              {/* Title */}
-              <h2 className="text-lg font-bold text-gray-800 line-clamp-2 min-h-14">
-                {product.title}
-              </h2>
-
-              {/* Description */}
-              <p className="text-sm text-gray-500 mt-3 line-clamp-2">
-                {product.description}
-              </p>
-
-              {/* Price */}
-              <div className="flex items-center justify-between mt-5">
-                <p className="text-2xl font-extrabold text-gray-900">
-                  ${product.price}
+            {/* Content & Actions */}
+            <div className="flex-1 flex flex-col justify-between">
+              {/* Product Info */}
+              <div className="px-5 pb-5 pt-2">
+                {/* Category */}
+                <p className="text-xs font-semibold text-blue-600 capitalize mb-1">
+                  {product.category}
                 </p>
 
-                <span className="text-xs text-green-600 font-semibold">
-                  In Stock
-                </span>
+                {/* Title */}
+                <h2 className="text-base font-bold text-gray-900 line-clamp-1 mb-2">
+                  {product.title}
+                </h2>
+
+                {/* Price */}
+                <p className="text-lg font-extrabold text-gray-900">
+                  ₹{product.price.toLocaleString("en-IN")}
+                </p>
               </div>
 
-              {/* Buttons */}
-              <div className="grid grid-cols-2 gap-3 mt-5">
-                <button className="border-2 border-blue-500 text-blue-500 py-2.5 rounded-xl font-bold hover:bg-blue-50 cursor-pointer transition">
-                  View
+              {/* Action Buttons */}
+              <div className="grid grid-cols-2 border-t border-gray-100 text-center divide-x divide-gray-100">
+                <button className="py-3.5 text-sm font-semibold text-blue-600 hover:bg-gray-50 transition-colors cursor-pointer">
+                  Edit
                 </button>
-
                 <button 
-                  className="bg-blue-500 text-white py-2.5 rounded-xl font-bold hover:bg-blue-600 cursor-pointer transition"
-                  onClick={() => setCartItem(prev => [...prev, product])}  
+                  className="py-3.5 text-sm font-semibold text-red-500 hover:bg-gray-50 transition-colors cursor-pointer"
+                  onClick={() => setCartItem((prev) => [...prev, product])}
                 >
-                  Add Cart
+                  Delete
                 </button>
               </div>
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Footer count */}
+      <div className="max-w-7xl mx-auto mt-8 text-sm text-gray-400">
+        Showing {filteredProducts.length} {filteredProducts.length === 1 ? "product" : "products"}
       </div>
     </div>
   );

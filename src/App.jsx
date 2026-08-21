@@ -10,7 +10,7 @@ const App = () => {
   const [cartItem, setCartItem] = useState([]);
 
   return (
-    <div className="h-screen p-4 flex flex-col gap-4">
+    <div className="min-h-screen bg-[#f8fafc] flex flex-col">
       <Navbar setIsCartOpen={setIsCartOpen} />
 
       {isCartOpen ? (
